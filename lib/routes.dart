@@ -9,7 +9,7 @@ class AppRoutes {
   static const String testForDeeplink = "/test-deeplink";
   static const String htmlContent = "/html-content";
   static const String callback = "/callback";
-  static const String applinkURL = "/?";
+  static const String applinkURL = "/launch-app";
 }
 
 class RouteGenerator {
@@ -23,16 +23,21 @@ class RouteGenerator {
       routeName = AppRoutes.callback;
     }
     if (routeName.startsWith(AppRoutes.applinkURL)) {
-      routeName = '/'; //replace with the edit data
+      var uri = Uri.parse(routeName);
+      var authcode = uri.queryParameters["authcode"] ?? "";
+      var state = uri.queryParameters["state"] ?? "";
+      routeName = AppRoutes.home;
       newRouteSettings = RouteSettings(
-        name: routeName,
-        arguments: Uri.base.queryParameters.toString(),
+        name: routeName, //replace with the edit data
+        arguments: "{authcode:$authcode,state:$state}",
       );
     }
     switch (routeName) {
       case AppRoutes.home:
         return buildRoute(
-          const MyHomePage(),
+          MyHomePage(
+            data: getData(newRouteSettings),
+          ),
           settings: newRouteSettings,
         );
       case AppRoutes.htmlContent:
@@ -58,6 +63,11 @@ class RouteGenerator {
       default:
         return _errorRoute();
     }
+  }
+
+  static String getData(RouteSettings settings) {
+    var res = settings.arguments ?? "";
+    return res.toString();
   }
 
   static MaterialPageRoute buildRoute(

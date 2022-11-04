@@ -8,29 +8,16 @@ import 'package:url_launcher/url_launcher.dart';
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
     super.key,
+    required this.data,
   });
+  final String? data;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? data;
   bool isLoading = false;
-
-  _getData() {
-    final args = ModalRoute.of(context)!.settings.arguments;
-    if (args != null) {
-      data = args.toString();
-      setState(() {});
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    _getData();
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : (data != null
-                  ? Text("Singpass username:${data!}")
+              : (widget.data != null && widget.data!.isNotEmpty
+                  ? Text("Singpass username:${widget.data!}")
                   : GestureDetector(
                       child: Container(
                         width: MediaQuery.of(context).size.width * 2 / 3,

@@ -45,7 +45,7 @@
                 <!-- Accepts URIs that begin with https://YOUR_HOST -->
                 <data
                     android:scheme="https"
-                    android:pathPrefix="/launch-app/"
+                    android:pathPrefix="/launch-app"
                     android:host="my-portfolio-6caa3.web.app" />
             </intent-filter>
         </activity>
